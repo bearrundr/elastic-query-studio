@@ -2,7 +2,7 @@
     "name": "elastic-query-studio",
     "displayName": "Elastic Query Studio by CLOUDIN Inc.",
     "description": "Elasticsearch query supporting DSL, ESQL, and EQL, SQL for Elasticsearch, OpenSearch and Elastic Cloud",
-    "version": "0.5.7",
+    "version": "0.5.8",
     "publisher": "daeyong-cloudin",
     "type": "commonjs",
     "icon": "media/eqs128x128.png",
@@ -39,10 +39,23 @@
         "Kibana",
         "Elastic",
         "Elastic client",
-        "es"
+        "OpenSearch",
+        "Elastic Cloud",
+        "OpenSearch Cloud",
+        "DSL",
+        "ESQL",
+        "EQL",
+        "SQL"
     ],
     "tags": [
         "Elasticsearch",
+        "OpenSearch",
+        "Elastic Cloud",
+        "OpenSearch Cloud",
+        "DSL",
+        "ESQL",
+        "EQL",
+        "SQL",
         "Elastic",
         "Kibana"
     ],
