@@ -118,7 +118,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     // Register commands
     context.subscriptions.push(
-        vscode.commands.registerCommand('extension.execute', (em?: ElasticMatch) => {
+        vscode.commands.registerCommand('elastic-query-studio.execute', (em?: ElasticMatch) => {
             if (!esMatches) {
                 vscode.window.showErrorMessage('No active Elasticsearch query editor');
                 return;
@@ -128,12 +128,12 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('extension.setHost', () => {
+        vscode.commands.registerCommand('elastic-query-studio.setHost', () => {
             setHost(context);
         })
     );
 
-    vscode.commands.registerCommand('extension.setClip', (uri, query) => {
+    vscode.commands.registerCommand('elastic-query-studio.setClip', (uri, query) => {
         // var ncp = require('copy-paste');
         // ncp.copy(query, function () {
         // vscode.window.showInformationMessage('Copied to clipboard');
@@ -141,7 +141,7 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('extension.open', (em: ElasticMatch) => {
+        vscode.commands.registerCommand('elastic-query-studio.open', (em: ElasticMatch) => {
             var column = 0;
             let uri = vscode.Uri.file(em.File.Text);
             return vscode.workspace
@@ -157,7 +157,7 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('extension.lint', (em: ElasticMatch) => {
+        vscode.commands.registerCommand('elastic-query-studio.lint', (em: ElasticMatch) => {
             try {
                 let l = em.Method.Range.start.line + 1;
                 const editor = vscode.window.activeTextEditor;

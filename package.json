@@ -1,8 +1,8 @@
 {
     "name": "elastic-query-studio",
-    "displayName": "Elastic Query Studio by CLOUDIN Inc.",
+    "displayName": "Elastic Query Studio",
     "description": "Elasticsearch query supporting DSL, ESQL, and EQL, SQL for Elasticsearch, OpenSearch and Elastic Cloud",
-    "version": "0.5.8",
+    "version": "0.5.9",
     "publisher": "daeyong-cloudin",
     "type": "commonjs",
     "icon": "media/eqs128x128.png",
@@ -30,8 +30,8 @@
         "theme": "dark"
     },
     "categories": [
-        "Other",
         "Programming Languages",
+        "Data Science",
         "Snippets"
     ],
     "keywords": [
@@ -68,18 +68,18 @@
     },
     "activationEvents": [
         "onLanguage:esql",
-        "onCommand:extension.execute",
-        "onCommand:extension.setHost"
+        "onCommand:elastic-query-studio.execute",
+        "onCommand:elastic-query-studio.setHost"
     ],
     "contributes": {
         "commands": [
             {
-                "command": "extension.setHost",
+                "command": "elastic-query-studio.setHost",
                 "title": "Elasticsearch: Set Host",
                 "category": "ES"
             },
             {
-                "command": "extension.execute",
+                "command": "elastic-query-studio.execute",
                 "title": "Elasticsearch: Run Query",
                 "category": "ES"
             }
@@ -123,11 +123,11 @@
         "keybindings": [
             {
                 "key": "ctrl+enter",
-                "command": "extension.execute",
+                "command": "elastic-query-studio.execute",
                 "when": "editorTextFocus && resourceLangId == 'esql'"
             },
             {
-                "command": "extension.execute",
+                "command": "elastic-query-studio.execute",
                 "key": "alt+Enter",
                 "when": "editorTextFocus && resourceLangId==esql"
             }
