@@ -289,7 +289,7 @@ export async function executeQuery(context: vscode.ExtensionContext, resultsProv
 }
 
 function showResult(result: string, column?: vscode.ViewColumn): Thenable<void> {
-    const tempResultFilePath = path.join(os.homedir(), '.vscode-elastic');
+    const tempResultFilePath = path.join(os.homedir(), '.elastic-query-studio');
     const resultFilePath = vscode.workspace.rootPath || tempResultFilePath;
 
     let uri = vscode.Uri.file(path.join(resultFilePath, 'result.json'));

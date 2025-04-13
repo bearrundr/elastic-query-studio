@@ -2,10 +2,10 @@
     "name": "elastic-query-studio",
     "displayName": "Elastic Query Studio by CLOUDIN Inc.",
     "description": "Elasticsearch query supporting DSL, ESQL, and EQL, SQL for Elasticsearch, OpenSearch and Elastic Cloud",
-    "version": "0.5.6",
+    "version": "0.5.7",
     "publisher": "daeyong-cloudin",
     "type": "commonjs",
-    "icon": "media/elastic.png",
+    "icon": "media/eqs128x128.png",
     "main": "./out/extension.js",
     "scripts": {
         "vscode:prepublish": "yarn package",
@@ -47,11 +47,11 @@
         "Kibana"
     ],
     "bugs": {
-        "url": "https://github.com/hsen-dev/vscode-elastic/issues"
+        "url": "https://github.com/bearrundr/elastic-query-studio/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/hsen-dev/vscode-elastic.git"
+        "url": "https://github.com/bearrundr/elastic-query-studio.git"
     },
     "activationEvents": [
         "onLanguage:esql",

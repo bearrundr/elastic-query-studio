@@ -1,5 +1,15 @@
 # Change Log
 
+All notable changes to the "Elastic Query Studio" extension will be documented in this file.
+
+## [0.5.6]
+
+- Initial release of Elastic Query Studio
+- Support for Elasticsearch query development
+- Basic query execution and result viewing
+- Support for ESQL, DSL, and EQL
+- Integration with Elasticsearch and OpenSearch
+
 ## [0.5.5] - 2025-4-13
 ### Fixed
 - Host connection initialization issue resolved
