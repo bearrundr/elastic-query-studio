@@ -1,4 +1,28 @@
 /**
+ * @file debug.ts
+ * @description Debug utility class and functions for Elastic Query Studio
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @version 0.5.0
+ * @since 2025-03-01
+ * @last 2025-03-01
+ * 
+ * This file provides debugging utilities including:
+ * - Singleton debug logger class for Elastic Query Studio
+ * - Formatted logging with timestamps and tracking IDs
+ * - Conditional logging based on environment
+ * - Support for different log levels (debug, error, warn)
+ * - Specialized for Elasticsearch, OpenSearch and Elastic Cloud operations
+ * 
+ * @history
+ * - 2025-03-01 Initial version (v0.5.0)
+ *   - Created debug utility class
+ *   - Implemented singleton pattern
+ *   - Added support for different log levels
+ */
+
+/**
  * Debug mode activation status
  * Activated when NODE_ENV is 'development'
  */

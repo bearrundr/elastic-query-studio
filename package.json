@@ -1,9 +1,9 @@
 {
-    "name": "elastic",
-    "displayName": "Elasticsearch for VSCode",
-    "description": "Elasticsearch client like Kibana console for vscode",
-    "version": "1.0.27",
-    "publisher": "ria",
+    "name": "elastic-query-studio",
+    "displayName": "Elastic Query Studio by CLOUDIN Inc.",
+    "description": "Elasticsearch query supporting DSL, ESQL, and EQL, SQL for Elasticsearch, OpenSearch and Elastic Cloud",
+    "version": "0.5.0",
+    "publisher": "daeyong-cloudin",
     "icon": "media/elastic.png",
     "main": "./out/extension.js",
     "scripts": {
@@ -12,6 +12,7 @@
         "test": "yarn package",
         "compile": "webpack",
         "watch": "webpack --watch",
+        "dev": "cross-env NODE_ENV=development yarn watch",
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
         "removeUnusedImports": "tslint --config tslint-imports.json --fix --project .",
         "deploy": "cross-env-shell \"vsce publish --yarn --githubBranch $BRANCH --baseContentUrl $REPO_URL --baseImagesUrl $REPO_URL --pat $VSCE_PAT\"",
