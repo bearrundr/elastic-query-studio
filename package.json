@@ -7,16 +7,16 @@
     "icon": "media/elastic.png",
     "main": "./out/extension.js",
     "scripts": {
-        "vscode:prepublish": "npm run package",
+        "vscode:prepublish": "yarn package",
         "package": "webpack --mode production --devtool hidden-source-map",
-        "test": "npm run package",
+        "test": "yarn package",
         "compile": "webpack",
         "watch": "webpack --watch",
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
         "removeUnusedImports": "tslint --config tslint-imports.json --fix --project .",
         "deploy": "cross-env-shell \"vsce publish --yarn --githubBranch $BRANCH --baseContentUrl $REPO_URL --baseImagesUrl $REPO_URL --pat $VSCE_PAT\"",
         "postinstall": "husky install",
-        "updateDep": "npm-check-updates -u"
+        "updateDep": "yarn upgrade-interactive --latest"
     },
     "engines": {
         "vscode": "^1.66.0"
