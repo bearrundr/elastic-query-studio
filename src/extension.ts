@@ -4,7 +4,7 @@
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @modified 2024-03-01
+ * @modified 2024-03-14
  * 
  * This file provides:
  * - Extension activation and deactivation handlers
@@ -13,6 +13,12 @@
  * - Configuration and host management
  * 
  * @history
+ * - 2024-03-14 Bug fixes and improvements
+ *   - Fixed host connection initialization issue
+ *   - Added proper error handling for undefined editor states
+ *   - Improved component initialization logic
+ *   - Added proper command registration for 'extension.execute'
+ *   - Enhanced event handler management
  * - 2024-03-01 Initial documented version
  *   - Added proper file documentation
  *   - Implemented core extension functionality
@@ -34,63 +40,97 @@ import axiosInstance from './axiosInstance';
 import stripJsonComments from './helpers';
 
 export async function activate(context: vscode.ExtensionContext) {
+    // Initialize host configuration
     getHost(context);
+    
+    // Define supported languages
     const languages = ['esql', 'elasticsearch'];
-    context.subscriptions.push(vscode.languages.registerCodeLensProvider(languages, new ElasticCodeLensProvider(context)));
-
+    
+    // Initialize providers
     let resultsProvider = new ElasticContentProvider();
-    vscode.workspace.registerTextDocumentContentProvider('elasticsearch', resultsProvider);
+    let esMatches: ElasticMatches | undefined;
+    let decoration: ElasticDecoration | undefined;
+    
+    // Register content provider
+    context.subscriptions.push(
+        vscode.workspace.registerTextDocumentContentProvider('elasticsearch', resultsProvider)
+    );
 
-    let esMatches: ElasticMatches;
-    let decoration: ElasticDecoration;
+    // Register CodeLens provider
+    context.subscriptions.push(
+        vscode.languages.registerCodeLensProvider(languages, new ElasticCodeLensProvider(context))
+    );
 
-    function checkEditor(document: vscode.TextDocument): Boolean {
-        if (document === vscode.window.activeTextEditor!.document && document.languageId == 'esql') {
-            if (esMatches == null || decoration == null) {
-                esMatches = new ElasticMatches(vscode.window.activeTextEditor!);
-                decoration = new ElasticDecoration(context);
-            }
+    function initializeEditorComponents(editor: vscode.TextEditor | undefined) {
+        if (!editor || editor.document.languageId !== 'esql') {
+            return false;
+        }
+        
+        try {
+            esMatches = new ElasticMatches(editor);
+            decoration = new ElasticDecoration(context);
+            decoration.UpdateDecoration(esMatches);
             return true;
+        } catch (error) {
+            console.error('Failed to initialize editor components:', error);
+            return false;
         }
-        return false;
     }
 
-    if (checkEditor(vscode.window.activeTextEditor!.document)) {
-        esMatches = new ElasticMatches(vscode.window.activeTextEditor!);
-        decoration!.UpdateDecoration(esMatches);
+    // Initialize if active editor exists
+    if (vscode.window.activeTextEditor) {
+        initializeEditorComponents(vscode.window.activeTextEditor);
     }
 
-    vscode.workspace.onDidChangeTextDocument(e => {
-        if (checkEditor(e.document)) {
-            esMatches = new ElasticMatches(vscode.window.activeTextEditor!);
-            decoration.UpdateDecoration(esMatches);
-        }
-    });
-
-    vscode.window.onDidChangeTextEditorSelection(e => {
-        if (checkEditor(e.textEditor.document)) {
-            esMatches.UpdateSelection(e.textEditor);
-            decoration.UpdateDecoration(esMatches);
-        }
-    });
-    let esCompletionHover = new ElasticCompletionItemProvider(context);
-
-    context.subscriptions.push(vscode.languages.registerCompletionItemProvider(languages, esCompletionHover, '/', '?', '&', '"'));
-    context.subscriptions.push(vscode.languages.registerHoverProvider(languages, esCompletionHover));
+    // Register event handlers
+    context.subscriptions.push(
+        vscode.window.onDidChangeActiveTextEditor(editor => {
+            if (editor) {
+                initializeEditorComponents(editor);
+            }
+        })
+    );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('extension.execute', (em: ElasticMatch) => {
-            if (!em) {
-                em = esMatches.Selection;
+        vscode.workspace.onDidChangeTextDocument(e => {
+            const editor = vscode.window.activeTextEditor;
+            if (editor && e.document === editor.document && e.document.languageId === 'esql') {
+                initializeEditorComponents(editor);
             }
-            executeQuery(context, resultsProvider, em);
-        }),
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.window.onDidChangeTextEditorSelection(e => {
+            if (e.textEditor.document.languageId === 'esql' && esMatches && decoration) {
+                esMatches.UpdateSelection(e.textEditor);
+                decoration.UpdateDecoration(esMatches);
+            }
+        })
+    );
+
+    // Register completion and hover provider
+    let esCompletionHover = new ElasticCompletionItemProvider(context);
+    context.subscriptions.push(
+        vscode.languages.registerCompletionItemProvider(languages, esCompletionHover, '/', '?', '&', '"'),
+        vscode.languages.registerHoverProvider(languages, esCompletionHover)
+    );
+
+    // Register commands
+    context.subscriptions.push(
+        vscode.commands.registerCommand('extension.execute', (em?: ElasticMatch) => {
+            if (!esMatches) {
+                vscode.window.showErrorMessage('No active Elasticsearch query editor');
+                return;
+            }
+            executeQuery(context, resultsProvider, em || esMatches.Selection);
+        })
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand('extension.setHost', () => {
             setHost(context);
-        }),
+        })
     );
 
     vscode.commands.registerCommand('extension.setClip', (uri, query) => {

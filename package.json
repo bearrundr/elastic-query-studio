@@ -2,7 +2,7 @@
     "name": "elastic-query-studio",
     "displayName": "Elastic Query Studio by CLOUDIN Inc.",
     "description": "Elasticsearch query supporting DSL, ESQL, and EQL, SQL for Elasticsearch, OpenSearch and Elastic Cloud",
-    "version": "0.5.1",
+    "version": "0.5.6",
     "publisher": "daeyong-cloudin",
     "type": "commonjs",
     "icon": "media/elastic.png",
@@ -63,6 +63,11 @@
             {
                 "command": "extension.setHost",
                 "title": "Elasticsearch: Set Host",
+                "category": "ES"
+            },
+            {
+                "command": "extension.execute",
+                "title": "Elasticsearch: Run Query",
                 "category": "ES"
             }
         ],
