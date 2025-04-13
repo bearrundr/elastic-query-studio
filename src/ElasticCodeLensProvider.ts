@@ -1,3 +1,26 @@
+/**
+ * @file ElasticCodeLensProvider.ts
+ * @description VS Code CodeLens Provider for Elasticsearch Query Support
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - CodeLens implementation for Elasticsearch queries
+ * - Real-time query validation and suggestions
+ * - Integration with Elasticsearch REST API specifications
+ * - Support for multiple Elasticsearch versions
+ * - Query execution and result preview
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Added CodeLens provider implementation
+ *   - Integrated with REST API specifications
+ *   - Added query validation and suggestions
+ *   - Implemented version-specific support
+ */
+
 import * as vscode from 'vscode';
 import { ElasticDecoration } from './ElasticDecoration';
 import { ElasticMatches } from './ElasticMatches';

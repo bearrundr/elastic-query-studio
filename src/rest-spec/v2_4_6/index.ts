@@ -1,3 +1,26 @@
+/**
+ * @file rest-spec/v2_4_6/index.ts
+ * @description Elasticsearch 2.4.6 REST API specification
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Complete REST API specification for Elasticsearch 2.4.6
+ * - JSON definitions for all API endpoints
+ * - Parameter types and validation rules
+ * - URL path templates and components
+ * - Request/response body schemas
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Added complete API specification for version 2.4.6
+ *   - Included all core APIs (indices, cluster, documents, etc.)
+ *   - Added parameter validation rules
+ *   - Added URL path templates
+ */
+
 const def_bulk = JSON.parse(
     '{"bulk":{"documentation":"https://www.elastic.co/guide/en/elasticsearch/reference/2.4/docs-bulk.html","methods":["POST","PUT"],"url":{"path":"/_bulk","paths":["/_bulk","/{index}/_bulk","/{index}/{type}/_bulk"],"parts":{"index":{"type":"string","description":"Default index for items which don\'t provide one"},"type":{"type":"string","description":"Default document type for items which don\'t provide one"}},"params":{"consistency":{"type":"enum","options":["one","quorum","all"],"description":"Explicit write consistency setting for the operation"},"refresh":{"type":"boolean","description":"Refresh the index after performing the operation"},"routing":{"type":"string","description":"Specific routing value"},"timeout":{"type":"time","description":"Explicit operation timeout"},"type":{"type":"string","description":"Default document type for items which don\'t provide one"},"fields":{"type":"list","description":"Default comma-separated list of fields to return in the response for updates"}}},"body":{"description":"The operation definition and data (action-data pairs), separated by newlines","required":true,"serialize":"bulk"}}}',
 );

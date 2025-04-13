@@ -1,3 +1,26 @@
+/**
+ * @file ElasticCompletionItemProvider.ts
+ * @description Intelligent code completion provider for Elasticsearch queries
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Intelligent code completion for Elasticsearch API endpoints
+ * - Hover documentation for query components
+ * - Dynamic completion based on Elasticsearch version
+ * - Auto-completion for indices, aliases, and repositories
+ * - REST API specification routing and matching
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Implemented intelligent code completion
+ *   - Added hover documentation support
+ *   - Added REST API specification routing
+ *   - Integrated dynamic index and alias completion
+ */
+
 import { ElasticMatch } from './ElasticMatch';
 import { ElasticMatches } from './ElasticMatches';
 import * as vscode from 'vscode';

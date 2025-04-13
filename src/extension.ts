@@ -1,3 +1,24 @@
+/**
+ * @file extension.ts
+ * @description Main extension file for VS Code Elastic Query Studio
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Extension activation and deactivation handlers
+ * - Core functionality for Elasticsearch query execution
+ * - Integration with VS Code's extension APIs
+ * - Configuration and host management
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Added proper file documentation
+ *   - Implemented core extension functionality
+ *   - Added query execution and result display
+ */
+
 import * as vscode from 'vscode';
 import path = require('path');
 import * as fs from 'fs';

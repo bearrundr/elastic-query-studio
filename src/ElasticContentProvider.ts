@@ -1,3 +1,26 @@
+/**
+ * @file ElasticContentProvider.ts
+ * @description Content provider for Elasticsearch query results
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Custom TextDocumentContentProvider implementation
+ * - Query results rendering with JSON formatting
+ * - Status and error handling display
+ * - Template-based result visualization
+ * - Dynamic content updates
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Implemented content provider for query results
+ *   - Added JSON and plain text result handling
+ *   - Added template-based rendering
+ *   - Integrated status code handling
+ */
+
 import * as vscode from 'vscode';
 import * as path from 'path';
 import fs = require('fs');

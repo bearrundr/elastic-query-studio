@@ -1,3 +1,25 @@
+/**
+ * @file axiosInstance.ts
+ * @description Axios HTTP client configuration for Elasticsearch
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Configured Axios instance for Elasticsearch API calls
+ * - Request and response interceptors for debugging
+ * - Error handling and logging
+ * - Custom headers configuration
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Created custom Axios instance
+ *   - Added request/response interceptors
+ *   - Implemented error handling
+ *   - Added debug logging
+ */
+
 import axios from 'axios';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';

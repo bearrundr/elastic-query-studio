@@ -1,3 +1,26 @@
+/**
+ * @file helpers.ts
+ * @description Utility functions for JSON comment handling
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - JSON comment stripping functionality
+ * - Support for single and multi-line comments
+ * - Whitespace preservation options
+ * - String content protection
+ * - Escape character handling
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Implemented JSON comment stripping
+ *   - Added whitespace preservation
+ *   - Added string content protection
+ *   - Added escape character handling
+ */
+
 const singleComment = Symbol('singleComment');
 const multiComment = Symbol('multiComment');
 

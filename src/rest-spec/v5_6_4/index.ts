@@ -1,3 +1,26 @@
+/**
+ * @file rest-spec/v5_6_4/index.ts
+ * @description Elasticsearch 5.6.4 REST API specification
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Complete REST API specification for Elasticsearch 5.6.4
+ * - JSON definitions for all API endpoints
+ * - Parameter types and validation rules
+ * - URL path templates and components
+ * - Request/response body schemas
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Added complete API specification for version 5.6.4
+ *   - Included all core APIs (indices, cluster, documents, etc.)
+ *   - Added parameter validation rules
+ *   - Added URL path templates
+ */
+
 const def__common = JSON.parse(
     '{"description":"Parameters that are accepted by all API endpoints.","documentation":"https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html","params":{"pretty":{"type":"boolean","description":"Pretty format the returned JSON response.","default":false},"human":{"type":"boolean","description":"Return human readable values for statistics.","default":true},"error_trace":{"type":"boolean","description":"Include the stack trace of returned errors.","default":false},"source":{"type":"string","description":"The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."},"filter_path":{"type":"list","description":"A comma-separated list of filters used to reduce the respone."}}}',
 );

@@ -1,3 +1,26 @@
+/**
+ * @file ElasticDecoration.ts
+ * @description VS Code editor decoration manager for Elasticsearch queries
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Custom editor decorations for query components
+ * - Syntax highlighting for methods and paths
+ * - Visual feedback for selected queries
+ * - Error highlighting and indicators
+ * - Gutter icons and background styling
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Implemented decoration types for query components
+ *   - Added light and dark theme support
+ *   - Added error highlighting
+ *   - Integrated gutter icons
+ */
+
 import * as vscode from 'vscode';
 import { ElasticMatches } from './ElasticMatches';
 import { getHost } from './extension';

@@ -1,3 +1,24 @@
+/**
+ * @file ElasticMatch.ts
+ * @description Elasticsearch query matching and parsing utilities
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Query pattern matching and parsing
+ * - Request body validation and error handling
+ * - File reference handling for external query bodies
+ * - Range and position tracking for VS Code integration
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Added query pattern matching
+ *   - Implemented body validation
+ *   - Added file reference support
+ */
+
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';

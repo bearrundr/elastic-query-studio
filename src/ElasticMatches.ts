@@ -1,3 +1,24 @@
+/**
+ * @file ElasticMatches.ts
+ * @description Collection manager for Elasticsearch query matches
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-01
+ * 
+ * This file provides:
+ * - Management of multiple Elasticsearch query matches
+ * - Editor selection tracking and updates
+ * - Query match collection initialization
+ * - Active selection management
+ * 
+ * @history
+ * - 2024-03-01 Initial documented version
+ *   - Implemented matches collection management
+ *   - Added selection tracking
+ *   - Added editor integration
+ */
+
 import * as vscode from 'vscode';
 import { ElasticMatch } from './ElasticMatch';
 
