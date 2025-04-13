@@ -1,0 +1,19 @@
+/**
+ * @file [filename]
+ * @description [file description]
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified [YYYY-MM-DD]
+ * 
+ * This file provides:
+ * - [main feature 1]
+ * - [main feature 2]
+ * - [main feature 3]
+ * 
+ * @history
+ * - [YYYY-MM-DD] Initial version
+ *   - [change 1]
+ *   - [change 2]
+ *   - [change 3]
+ */ 

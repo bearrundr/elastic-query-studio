@@ -4,9 +4,7 @@
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @version 0.5.0
- * @since 2025-03-01
- * @last 2025-03-01
+ * @modified 2025-03-01
  * 
  * This file provides debugging utilities including:
  * - Singleton debug logger class for Elastic Query Studio
@@ -16,10 +14,14 @@
  * - Specialized for Elasticsearch, OpenSearch and Elastic Cloud operations
  * 
  * @history
- * - 2025-03-01 Initial version (v0.5.0)
+ * - 2025-03-01 Initial version
  *   - Created debug utility class
  *   - Implemented singleton pattern
  *   - Added support for different log levels
+ * - 2025-03-01 Documentation update
+ *   - Removed version tag for better maintainability
+ *   - Consolidated @since and @last into @modified
+ *   - Updated history format
  */
 
 /**
