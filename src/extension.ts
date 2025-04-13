@@ -1,0 +1,257 @@
+import * as vscode from 'vscode';
+import path = require('path');
+import * as fs from 'fs';
+import * as os from 'os';
+import { ElasticCompletionItemProvider } from './ElasticCompletionItemProvider';
+import { ElasticCodeLensProvider } from './ElasticCodeLensProvider';
+import { ElasticContentProvider } from './ElasticContentProvider';
+import { ElasticDecoration } from './ElasticDecoration';
+import { ElasticMatch } from './ElasticMatch';
+import { ElasticMatches } from './ElasticMatches';
+import { AxiosError, AxiosResponse } from 'axios';
+import axiosInstance from './axiosInstance';
+import stripJsonComments from './helpers';
+
+export async function activate(context: vscode.ExtensionContext) {
+    getHost(context);
+    const languages = ['esql', 'elasticsearch'];
+    context.subscriptions.push(vscode.languages.registerCodeLensProvider(languages, new ElasticCodeLensProvider(context)));
+
+    let resultsProvider = new ElasticContentProvider();
+    vscode.workspace.registerTextDocumentContentProvider('elasticsearch', resultsProvider);
+
+    let esMatches: ElasticMatches;
+    let decoration: ElasticDecoration;
+
+    function checkEditor(document: vscode.TextDocument): Boolean {
+        if (document === vscode.window.activeTextEditor!.document && document.languageId == 'esql') {
+            if (esMatches == null || decoration == null) {
+                esMatches = new ElasticMatches(vscode.window.activeTextEditor!);
+                decoration = new ElasticDecoration(context);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    if (checkEditor(vscode.window.activeTextEditor!.document)) {
+        esMatches = new ElasticMatches(vscode.window.activeTextEditor!);
+        decoration!.UpdateDecoration(esMatches);
+    }
+
+    vscode.workspace.onDidChangeTextDocument(e => {
+        if (checkEditor(e.document)) {
+            esMatches = new ElasticMatches(vscode.window.activeTextEditor!);
+            decoration.UpdateDecoration(esMatches);
+        }
+    });
+
+    vscode.window.onDidChangeTextEditorSelection(e => {
+        if (checkEditor(e.textEditor.document)) {
+            esMatches.UpdateSelection(e.textEditor);
+            decoration.UpdateDecoration(esMatches);
+        }
+    });
+    let esCompletionHover = new ElasticCompletionItemProvider(context);
+
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider(languages, esCompletionHover, '/', '?', '&', '"'));
+    context.subscriptions.push(vscode.languages.registerHoverProvider(languages, esCompletionHover));
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('extension.execute', (em: ElasticMatch) => {
+            if (!em) {
+                em = esMatches.Selection;
+            }
+            executeQuery(context, resultsProvider, em);
+        }),
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('extension.setHost', () => {
+            setHost(context);
+        }),
+    );
+
+    vscode.commands.registerCommand('extension.setClip', (uri, query) => {
+        // var ncp = require('copy-paste');
+        // ncp.copy(query, function () {
+        // vscode.window.showInformationMessage('Copied to clipboard');
+        // });
+    });
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('extension.open', (em: ElasticMatch) => {
+            var column = 0;
+            let uri = vscode.Uri.file(em.File.Text);
+            return vscode.workspace
+                .openTextDocument(uri)
+                .then(textDocument =>
+                    vscode.window.showTextDocument(
+                        textDocument,
+                        column ? (column > vscode.ViewColumn.Three ? vscode.ViewColumn.One : column) : undefined,
+                        true,
+                    ),
+                );
+        }),
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('extension.lint', (em: ElasticMatch) => {
+            try {
+                let l = em.Method.Range.start.line + 1;
+                const editor = vscode.window.activeTextEditor;
+                const config = vscode.workspace.getConfiguration('editor');
+                const tabSize = +(config.get('tabSize') as number);
+
+                editor!.edit(editBuilder => {
+                    if (em.HasBody) {
+                        let txt = editor!.document.getText(em.Body.Range);
+                        editBuilder.replace(em.Body.Range, JSON.stringify(JSON.parse(em.Body.Text), null, tabSize));
+                    }
+                });
+            } catch (error: any) {
+                console.log(error.message);
+            }
+        }),
+    );
+}
+
+async function setHost(context: vscode.ExtensionContext): Promise<string> {
+    const host = await vscode.window.showInputBox(<vscode.InputBoxOptions>{
+        prompt: 'Please enter the elastic host',
+        ignoreFocusOut: true,
+        value: getHost(context),
+    });
+
+    context.workspaceState.update('elasticsearch.host', host);
+    vscode.workspace.getConfiguration().update('elasticsearch.host', host);
+    return host || 'localhost:9200';
+}
+
+export function getHost(context: vscode.ExtensionContext): string {
+//    return context.workspaceState.get('elasticsearch.host') || vscode.workspace.getConfiguration().get('elasticsearch.host', 'localhost:9200');
+    // Debug JDY
+    const host = context.workspaceState.get('elasticsearch.host') || vscode.workspace.getConfiguration().get('elasticsearch.host', 'localhost:9200');
+    console.log('Current Elasticsearch host:', host);  // 디버그 로그
+    return host as string;
+}
+
+export async function executeQuery(context: vscode.ExtensionContext, resultsProvider: ElasticContentProvider, em: ElasticMatch) {
+    const host = getHost(context);
+    const startTime = new Date().getTime();
+
+    console.log('Executing query with host:', host);  // 디버그 로그
+    console.log('Query details:', {
+        method: em.Method.Text,
+        path: em.Path.Text,
+        body: em.Body?.Text
+    });  // 디버그 로그
+
+
+    const config = vscode.workspace.getConfiguration();
+    var asDocument = config.get('elasticsearch.showResultAsDocument');
+
+    // WebView 패널 선언
+    let resultPanel: vscode.WebviewPanel | undefined;
+
+    if (!asDocument) {
+        // vscode.commands.executeCommand('vscode.previewHtml', resultsProvider.contentUri, vscode.ViewColumn.Two, 'ElasticSearch Query');
+        // resultsProvider.update(context, host, '', startTime, 0, 'Executing query ...');
+        // 새로운 WebView 방식으로 변경
+        resultPanel = vscode.window.createWebviewPanel(  // panel을 resultPanel로 수정
+            'elasticResults',
+            'ElasticSearch Results',
+            vscode.ViewColumn.Two,
+            {
+                enableScripts: true
+            }
+        );
+            // 패널이 성공적으로 생성되었을 때만 HTML 설정
+        if (resultPanel) {
+            resultPanel.webview.html = `<html><body>Executing query...</body></html>`;
+        }
+        // 패널 폐기 처리
+        resultPanel?.onDidDispose(() => {
+            resultPanel = undefined;
+        });
+        
+    }
+
+    const sbi = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    sbi.text = '$(search) Executing query ...';
+    sbi.show();
+
+    let response: any;
+    try {
+        const body = stripJsonComments(em.Body.Text);
+        response = await axiosInstance
+            .request({
+                method: em.Method.Text as any,
+                baseURL: host,
+                url: em.Path.Text.startsWith('/') ? `${host}${em.Path.Text}` : em.Path.Text,
+                data: !body ? undefined : body,
+            })
+            .catch(error => error as AxiosError<any, any>);
+
+            console.log('Request config:', {  // 디버그 로그
+                method: em.Method.Text,
+                baseURL: host,
+                url: em.Path.Text.startsWith('/') ? `${host}${em.Path.Text}` : em.Path.Text,
+                data: body
+            });
+    
+    } catch (error) {
+        response = error;
+    }
+
+    sbi.dispose();
+    const endTime = new Date().getTime();
+    const error = response as AxiosError;
+    const data = response as AxiosResponse<any>;
+
+    let results = data.data;
+    if (asDocument) {
+        try {
+            const config = vscode.workspace.getConfiguration('editor');
+            const tabSize = +(config.get('tabSize') as number);
+            results = JSON.stringify(error.isAxiosError ? error.response?.data : data.data, null, tabSize);
+        } catch (error: any) {
+            results = data.data || error.response?.data || error.message;
+        }
+        showResult(results, vscode.window.activeTextEditor!.viewColumn! + 1);
+    } else if (resultPanel) {
+        // 새로운 WebView 방식으로 변경
+        // resultsProvider.update(context, host, results, endTime - startTime, data.status, data.statusText);
+        // vscode.commands.executeCommand('vscode.previewHtml', resultsProvider.contentUri, vscode.ViewColumn.Two, 'ElasticSearch Results');
+        resultPanel.webview.html = `<html><body><pre>${JSON.stringify(results, null, 2)}</pre></body></html>`;
+    }
+}
+
+function showResult(result: string, column?: vscode.ViewColumn): Thenable<void> {
+    const tempResultFilePath = path.join(os.homedir(), '.vscode-elastic');
+    const resultFilePath = vscode.workspace.rootPath || tempResultFilePath;
+
+    let uri = vscode.Uri.file(path.join(resultFilePath, 'result.json'));
+    if (!fs.existsSync(uri.fsPath)) {
+        uri = uri.with({ scheme: 'untitled' });
+    }
+    return vscode.workspace
+        .openTextDocument(uri)
+        .then(textDocument =>
+            vscode.window.showTextDocument(textDocument, column ? (column > vscode.ViewColumn.Three ? vscode.ViewColumn.One : column) : undefined, true),
+        )
+        .then(editor => {
+            editor.edit(editorBuilder => {
+                if (editor.document.lineCount > 0) {
+                    const lastLine = editor.document.lineAt(editor.document.lineCount - 1);
+                    editorBuilder.delete(
+                        new vscode.Range(new vscode.Position(0, 0), new vscode.Position(lastLine.range.start.line, lastLine.range.end.character)),
+                    );
+                }
+                editorBuilder.insert(new vscode.Position(0, 0), result);
+            });
+        });
+}
+
+// this method is called when your extension is deactivated
+export function deactivate() {}
