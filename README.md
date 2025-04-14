@@ -1,5 +1,7 @@
 ## Elasticsearch for VSCode
 
+This project is a fork of [@hsen-dev/vscode-elastic](https://github.com/hsen-dev/vscode-elastic.git) with new features and improvements.
+
 Welcome to Elasticsearch for VSCode! An extension for developing elasticsearch queries.
 
 ![shot](shots/all.gif)
