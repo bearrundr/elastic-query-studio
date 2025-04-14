@@ -1,3 +1,25 @@
+/**
+ * @file scripts/build-rest-specs.ts
+ * @description Elasticsearch REST API Specification Builder
+ * @author CLOUDIN Inc. <bearrundr@hotmail.com>
+ * @copyright (c) 2024 CLOUDIN Inc.
+ * @license MIT
+ * @modified 2024-03-27
+ * 
+ * This script provides:
+ * - Automated generation of TypeScript index files from REST API specs
+ * - Support for multiple Elasticsearch versions
+ * - Processing of common definitions (_common.json)
+ * - Type-safe API specification generation
+ * - Progress logging and error handling
+ * 
+ * @history
+ * - 2024-03-27 Initial documented version
+ *   - Added support for versions 6.8.0, 7.17.0, 8.18.0, and 9.0.0
+ *   - Implemented automated index.ts generation
+ *   - Added progress logging and error handling
+ */
+
 import * as fs from 'fs';
 import * as path from 'path';
 
