@@ -1,12 +1,25 @@
 ## Elasticsearch for VSCode
 
-This project is a fork of [@hsen-dev/vscode-elastic](https://github.com/hsen-dev/vscode-elastic.git) with new features and improvements.
+This project is a fork of [@hsen-dev/vscode-elastic](https://github.com/hsen-dev/vscode-elastic) with new features and improvements.
 
-Welcome to Elasticsearch for VSCode! An extension for developing elasticsearch queries.
+A Visual Studio Code extension for managing and querying Elasticsearch clusters.
 
-![shot](shots/all.gif)
+### Features
 
-## Using
+- Connect to multiple Elasticsearch clusters
+- Execute and save queries
+- View and manage indices
+- Monitor cluster health
+- Syntax highlighting for Elasticsearch DSL
+
+### Installation
+
+1. Open VS Code
+2. Go to Extensions (Ctrl+Shift+X)
+3. Search for "Elasticsearch for VSCode"
+4. Click Install
+
+### Usage
 
 -   Open an existing file with a `.esql` file extenion or open a new text file (`ctrl+n`) and change the language mode to `Elasticsearch (esql)` by pressing `ctrl+k,m` and select `esql`. Elasticsearch queries and funtionalities are enabled in the esql language mode in Visual Studio Code editor.
 -   For https endpoints, just add protocol type in url : `https://host`
@@ -50,3 +63,37 @@ PUT /my-index
 -   Work with multi host
 -   User Authentication
 -   IntelliSense like kibana autocomplete
+
+### Development
+
+#### Prerequisites
+
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+- Visual Studio Code
+
+#### Setup
+
+1. Clone the repository
+```bash
+git clone https://github.com/[username]/elastic-query-studio.git
+cd elastic-query-studio
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Build the extension
+```bash
+npm run build
+```
+
+### Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
+
+### License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

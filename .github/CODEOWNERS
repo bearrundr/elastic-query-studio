@@ -1,0 +1,13 @@
+# These owners will be the default owners for everything in the repository
+* @repository-owner
+
+# Dependency files
+package.json @repository-owner
+package-lock.json @repository-owner
+
+# Source code
+/src/ @repository-owner
+
+# Documentation
+/docs/ @repository-owner
+*.md @repository-owner 
