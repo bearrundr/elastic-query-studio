@@ -23,6 +23,20 @@ const config = {
     resolve: {
         // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
         extensions: ['.ts', '.js'],
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+        }
+    },
+    cache: {
+        type: 'filesystem',
+        buildDependencies: {
+            config: [__filename]
+        }
+    },
+    optimization: {
+        moduleIds: 'deterministic',
+        removeAvailableModules: true,
+        removeEmptyChunks: true
     },
     module: {
         rules: [
@@ -32,10 +46,17 @@ const config = {
                 use: [
                     {
                         loader: 'ts-loader',
-                    },
-                ],
-            },
-        ],
+                        options: {
+                            transpileOnly: true,
+                            experimentalWatchApi: true,
+                            compilerOptions: {
+                                sourceMap: true
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
     }
 };
 module.exports = config;

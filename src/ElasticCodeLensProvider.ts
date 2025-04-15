@@ -4,7 +4,7 @@
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @modified 2024-03-01
+ * @modified 2025-04-15
  * 
  * This file provides:
  * - CodeLens implementation for Elasticsearch queries
@@ -19,6 +19,9 @@
  *   - Integrated with REST API specifications
  *   - Added query validation and suggestions
  *   - Implemented version-specific support
+ * - 2025-04-15 Code cleanup
+ *   - Marked unused parameters
+ *   - Enhanced type checking compliance
  */
 
 import * as vscode from 'vscode';
@@ -34,7 +37,7 @@ export class ElasticCodeLensProvider implements vscode.CodeLensProvider {
         this.decoration = new ElasticDecoration(context);
     }
 
-    public provideCodeLenses(document: vscode.TextDocument, _token: vscode.CancellationToken) {
+    public provideCodeLenses(_document: vscode.TextDocument, _token: vscode.CancellationToken) {
         var esMatches = new ElasticMatches(vscode.window.activeTextEditor!);
 
         var ret: any[] = [];

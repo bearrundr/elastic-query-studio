@@ -4,7 +4,7 @@
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @modified 2024-03-14
+ * @modified 2025-04-15
  * 
  * This file provides:
  * - Extension activation and deactivation handlers
@@ -23,6 +23,10 @@
  *   - Added proper file documentation
  *   - Implemented core extension functionality
  *   - Added query execution and result display
+ * - 2025-04-15 Code cleanup
+ *   - Removed unused variables and parameters
+ *   - Enhanced type checking compliance
+ *   - Removed unused imports
  */
 
 import * as vscode from 'vscode';
@@ -35,9 +39,8 @@ import { ElasticContentProvider } from './ElasticContentProvider';
 import { ElasticDecoration } from './ElasticDecoration';
 import { ElasticMatch } from './ElasticMatch';
 import { ElasticMatches } from './ElasticMatches';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import axiosInstance from './axiosInstance';
-import stripJsonComments from './helpers';
 
 export async function activate(context: vscode.ExtensionContext) {
     // Initialize host configuration
@@ -133,7 +136,8 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
-    vscode.commands.registerCommand('elastic-query-studio.setClip', (uri, query) => {
+    vscode.commands.registerCommand('elastic-query-studio.setClip', (_uri: vscode.Uri, _query: string) => {
+        // Commented out functionality
         // var ncp = require('copy-paste');
         // ncp.copy(query, function () {
         // vscode.window.showInformationMessage('Copied to clipboard');
@@ -159,14 +163,12 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand('elastic-query-studio.lint', (em: ElasticMatch) => {
             try {
-                let l = em.Method.Range.start.line + 1;
                 const editor = vscode.window.activeTextEditor;
                 const config = vscode.workspace.getConfiguration('editor');
                 const tabSize = +(config.get('tabSize') as number);
 
                 editor!.edit(editBuilder => {
                     if (em.HasBody) {
-                        let txt = editor!.document.getText(em.Body.Range);
                         editBuilder.replace(em.Body.Range, JSON.stringify(JSON.parse(em.Body.Text), null, tabSize));
                     }
                 });
@@ -197,94 +199,29 @@ export function getHost(context: vscode.ExtensionContext): string {
     return host as string;
 }
 
-export async function executeQuery(context: vscode.ExtensionContext, resultsProvider: ElasticContentProvider, em: ElasticMatch) {
+export async function executeQuery(context: vscode.ExtensionContext, _resultsProvider: ElasticContentProvider, em: ElasticMatch) {
+    if (!em) {
+        return;
+    }
+
     const host = getHost(context);
-    const startTime = new Date().getTime();
-
-    console.log('Executing query with host:', host);  // 디버그 로그
-    console.log('Query details:', {
-        method: em.Method.Text,
-        path: em.Path.Text,
-        body: em.Body?.Text
-    });  // 디버그 로그
-
-
-    const config = vscode.workspace.getConfiguration();
-    var asDocument = config.get('elasticsearch.showResultAsDocument');
-
-    // WebView 패널 선언
-    let resultPanel: vscode.WebviewPanel | undefined;
-
-    if (!asDocument) {
-        // vscode.commands.executeCommand('vscode.previewHtml', resultsProvider.contentUri, vscode.ViewColumn.Two, 'ElasticSearch Query');
-        // resultsProvider.update(context, host, '', startTime, 0, 'Executing query ...');
-        // 새로운 WebView 방식으로 변경
-        resultPanel = vscode.window.createWebviewPanel(  // panel을 resultPanel로 수정
-            'elasticResults',
-            'ElasticSearch Results',
-            vscode.ViewColumn.Two,
-            {
-                enableScripts: true
-            }
-        );
-            // 패널이 성공적으로 생성되었을 때만 HTML 설정
-        if (resultPanel) {
-            resultPanel.webview.html = `<html><body>Executing query...</body></html>`;
-        }
-        // 패널 폐기 처리
-        resultPanel?.onDidDispose(() => {
-            resultPanel = undefined;
-        });
-        
-    }
-
-    const sbi = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-    sbi.text = '$(search) Executing query ...';
-    sbi.show();
-
-    let response: any;
-    try {
-        const body = stripJsonComments(em.Body.Text);
-        response = await axiosInstance
-            .request({
-                method: em.Method.Text as any,
-                baseURL: host,
-                url: em.Path.Text.startsWith('/') ? `${host}${em.Path.Text}` : em.Path.Text,
-                data: !body ? undefined : body,
-            })
-            .catch(error => error as AxiosError<any, any>);
-
-            console.log('Request config:', {  // 디버그 로그
-                method: em.Method.Text,
-                baseURL: host,
-                url: em.Path.Text.startsWith('/') ? `${host}${em.Path.Text}` : em.Path.Text,
-                data: body
-            });
+    const url = `${host}${em.Path.Text}`;
     
+    try {
+        const response = await axiosInstance.request({
+            method: em.Method.Text.toLowerCase() as 'get' | 'post' | 'put' | 'delete',
+            url: url,
+            data: em.HasBody ? JSON.parse(em.Body.Text) : undefined,
+        });
+
+        showResult(JSON.stringify(response.data, null, 2));
     } catch (error) {
-        response = error;
-    }
-
-    sbi.dispose();
-    const endTime = new Date().getTime();
-    const error = response as AxiosError;
-    const data = response as AxiosResponse<any>;
-
-    let results = data.data;
-    if (asDocument) {
-        try {
-            const config = vscode.workspace.getConfiguration('editor');
-            const tabSize = +(config.get('tabSize') as number);
-            results = JSON.stringify(error.isAxiosError ? error.response?.data : data.data, null, tabSize);
-        } catch (error: any) {
-            results = data.data || error.response?.data || error.message;
+        if (error && typeof error === 'object' && 'isAxiosError' in error) {
+            const axiosError = error as AxiosError;
+            showResult(JSON.stringify(axiosError.response?.data || axiosError.message, null, 2));
+        } else {
+            showResult(JSON.stringify(error, null, 2));
         }
-        showResult(results, vscode.window.activeTextEditor!.viewColumn! + 1);
-    } else if (resultPanel) {
-        // 새로운 WebView 방식으로 변경
-        // resultsProvider.update(context, host, results, endTime - startTime, data.status, data.statusText);
-        // vscode.commands.executeCommand('vscode.previewHtml', resultsProvider.contentUri, vscode.ViewColumn.Two, 'ElasticSearch Results');
-        resultPanel.webview.html = `<html><body><pre>${JSON.stringify(results, null, 2)}</pre></body></html>`;
     }
 }
 

@@ -4,7 +4,7 @@
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @modified 2025-03-01
+ * @modified 2025-04-15
  * 
  * This file provides debugging utilities including:
  * - Singleton debug logger class for Elastic Query Studio
@@ -22,6 +22,9 @@
  *   - Removed version tag for better maintainability
  *   - Consolidated @since and @last into @modified
  *   - Updated history format
+ * - 2025-04-15 Code cleanup
+ *   - Removed unused parameters
+ *   - Enhanced type checking compliance
  */
 
 /**
@@ -56,7 +59,7 @@ export class DebugLogger {
         return `+${elapsed}ms`;
     }
 
-    private formatMessage(level: string, message: string, ...args: any[]): string {
+    private formatMessage(level: string, message: string): string {
         const timestamp = new Date().toISOString();
         const timeTrack = this.getTimeTrack();
         return `[${timestamp}][${level}][${this.globalTrackingId}][${timeTrack}] ${message}`;

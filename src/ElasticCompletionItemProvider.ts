@@ -4,7 +4,7 @@
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @modified 2024-03-01
+ * @modified 2025-04-15
  * 
  * This file provides:
  * - Intelligent code completion for Elasticsearch API endpoints
@@ -19,6 +19,9 @@
  *   - Added hover documentation support
  *   - Added REST API specification routing
  *   - Integrated dynamic index and alias completion
+ * - 2025-04-15 Code cleanup
+ *   - Marked unused parameters
+ *   - Enhanced type checking compliance
  */
 
 import { ElasticMatch } from './ElasticMatch';
@@ -118,9 +121,9 @@ export class ElasticCompletionItemProvider implements vscode.CompletionItemProvi
     }
 
     private async asyncProvideCompletionItems(
-        document: vscode.TextDocument,
+        _document: vscode.TextDocument,
         position: vscode.Position,
-        token: vscode.CancellationToken,
+        _token: vscode.CancellationToken,
     ): Promise<vscode.CompletionItem[] | vscode.CompletionList> {
         let esVersion = await this.getElasticVersion();
         esVersion = '6.0.0';
