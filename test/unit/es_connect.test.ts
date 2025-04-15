@@ -1,51 +1,39 @@
 /**
  * @file es_connect.test.ts
- * @description Test suite for Elasticsearch connection and basic operations
+ * @description Test suite for Elasticsearch connection functionality
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @modified 2024-03-21
+ * @modified 2025-04-15
  * 
  * This test suite verifies:
- * - Direct Elasticsearch connection
- * - Basic cluster operations
- * - Connection error handling
- * - Configuration validation
+ * - Elasticsearch connection functionality
+ * - Basic cluster information retrieval
  * 
  * @history
  * - 2024-03-21 Initial documented version
- *   - Added connection tests
- *   - Added configuration validation
- *   - Implemented error scenarios
+ *   - Added basic connection test
+ * - 2025-04-15 Code cleanup
+ *   - Removed unused imports
+ *   - Enhanced type checking compliance
  */
-import { expect, settings } from '../common/test-config';
-const axios = require('axios');
-const https = require('https');
-const path = require('path');
+
+import { expect } from 'chai';
+import axios from 'axios';
+import settings from '../settings.json';
 
 describe('Elasticsearch Connection Test', () => {
-    const ES_URL = settings.elasticsearch.url;
-    const TIMEOUT = settings.elasticsearch.timeout;
-
     it('should connect to Elasticsearch successfully', async () => {
         try {
-            const response = await axios.get(ES_URL, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                timeout: TIMEOUT,
-                httpsAgent: new https.Agent({
-                    rejectUnauthorized: false
-                })
-            });
-            
+            const response = await axios.get(settings.elasticsearch.url);
+            const info = {
+                version: response.data.version.number,
+                clusterName: response.data.cluster_name
+            };
+            console.log('Elasticsearch Info:', info);
             expect(response.status).to.equal(200);
             expect(response.data).to.have.property('version');
             expect(response.data).to.have.property('cluster_name');
-            console.log('Elasticsearch Info:', {
-                version: response.data.version.number,
-                clusterName: response.data.cluster_name
-            });
         } catch (error) {
             console.error('Connection Error:', error instanceof Error ? error.message : 'Unknown error');
             throw error;

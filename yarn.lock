@@ -329,6 +329,11 @@
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.7.tgz"
   integrity sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==
 
+"@types/jsesc@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/jsesc/-/jsesc-3.0.3.tgz#7b21f8edcdf84d28cff0d750ceaa8df4504168ac"
+  integrity sha512-YZZ9ZOAiiSVC6KApWd/fTCDTdTOOMiRU4Lq3/VSmXNPse8IvCVOn5kYRRLu900Ub1lTPurVZFI5unEqLDJR7wg==
+
 "@types/json-schema@*", "@types/json-schema@^7.0.15", "@types/json-schema@^7.0.9":
   version "7.0.15"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz"
@@ -352,6 +357,11 @@
   integrity sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==
   dependencies:
     undici-types "~5.26.4"
+
+"@types/require-dir@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@types/require-dir/-/require-dir-1.0.4.tgz#1bf6b27fa2eaa9819e2fc282eef175d2d541a641"
+  integrity sha512-wZlfKxz4F97pMVAa9ztjm0TnaK4rH0COO9EE7AkMbvuIcXkrlFZQm2naZpITFN+PBqJ8vgxPV2+M6TzxWUQUSg==
 
 "@types/vscode@^1.66.0":
   version "1.99.1"

@@ -4,7 +4,7 @@
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @modified 2024-03-21
+ * @modified 2025-04-15
  * 
  * This test suite verifies:
  * - Basic connectivity to Elasticsearch server
@@ -17,16 +17,18 @@
  *   - Added basic connectivity test
  *   - Added index listing test
  *   - Implemented error handling
+ * - 2025-04-15 Code cleanup
+ *   - Converted require statements to imports
+ *   - Enhanced type checking compliance
+ *   - Removed unused imports
  */
 
-const { expect } = require('chai');
-const axiosInstance = require('../../src/axiosInstance').default;
-const settings = require('../settings.json');
-const { AxiosResponse } = require('axios');
+import { expect } from 'chai';
+import axiosInstance from '../../src/axiosInstance';
+import settings from '../settings.json';
 
 describe('Axios Instance Test', () => {
     const ES_URL = settings.elasticsearch.url;
-    const TIMEOUT = settings.elasticsearch.timeout;
 
     it('should connect to Elasticsearch using axiosInstance', async () => {
         try {

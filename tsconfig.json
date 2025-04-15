@@ -3,7 +3,13 @@
         "module": "commonjs",
         "target": "es2020",
         "outDir": "out",
-        "lib": ["es2020", "dom"],
+        "lib": [
+            "es2020",
+            "dom",
+            "ESNext",
+            "WebWorker",
+            "ScriptHost"
+        ],
         "sourceMap": true,
         "rootDir": ".",
         "strict": true,
@@ -18,11 +24,48 @@
         "typeRoots": [
             "./node_modules/@types",
             "./src/types"
-        ]
+        ],
+        "types": [
+            "node",
+            "vscode",
+            "mocha",
+            "chai"
+        ],
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "incremental": true,
+        "tsBuildInfoFile": "./out/.tsbuildinfo",
+        "importHelpers": true,
+        "removeComments": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowJs": false,
+        "checkJs": false,
+        "declaration": true,
+        "declarationMap": true,
+        "composite": true,
+        "isolatedModules": true,
+        "preserveSymlinks": true,
+        "inlineSources": true,
+        "sourceRoot": "${workspaceRoot}",
+        "mapRoot": "${outDir}"
     },
     "include": [
         "src/**/*",
-        "test/**/*"
+        "test/**/*",
+        "test/**/*.json"
     ],
-    "exclude": ["node_modules", ".vscode-test"]
+    "exclude": [
+        "node_modules",
+        ".vscode-test",
+        "media/**/*.js",
+        "build/**/*.js",
+        "out/**/*.js"
+    ]
 }

@@ -4,7 +4,7 @@
  * @author CLOUDIN Inc. <bearrundr@hotmail.com>
  * @copyright (c) 2024 CLOUDIN Inc.
  * @license MIT
- * @modified 2024-03-01
+ * @modified 2025-04-15
  * 
  * This file provides:
  * - Custom TextDocumentContentProvider implementation
@@ -19,6 +19,9 @@
  *   - Added JSON and plain text result handling
  *   - Added template-based rendering
  *   - Integrated status code handling
+ * - 2025-04-15 Code cleanup
+ *   - Marked unused parameters
+ *   - Enhanced type checking compliance
  */
 
 import * as vscode from 'vscode';
@@ -39,7 +42,7 @@ export class ElasticContentProvider implements vscode.TextDocumentContentProvide
     public contentUri = vscode.Uri.parse('elasticsearch://results');
     private changeEvent = new vscode.EventEmitter<vscode.Uri>();
 
-    public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): string | Thenable<string> {
+    public provideTextDocumentContent(_uri: vscode.Uri, _token: vscode.CancellationToken): string | Thenable<string> {
         let json = '';
         let plain = '';
 
