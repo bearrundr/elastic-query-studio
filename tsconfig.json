@@ -28,8 +28,7 @@
         "types": [
             "node",
             "vscode",
-            "mocha",
-            "chai"
+            "jest"
         ],
         "noImplicitAny": true,
         "strictNullChecks": true,
@@ -49,7 +48,6 @@
         "checkJs": false,
         "declaration": true,
         "declarationMap": true,
-        "composite": true,
         "isolatedModules": true,
         "preserveSymlinks": true,
         "inlineSources": true,
